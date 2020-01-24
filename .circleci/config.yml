@@ -1,0 +1,45 @@
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@1.0.5
+  moul: moul/build@1.14.0
+  retry: moul/retry@0.6.0
+  docker: circleci/docker@0.5.20
+  #dl: moul/dl@1.7.0
+  tools: gotest/tools@0.0.13
+
+jobs:
+  go-build:
+    working_directory: /go/src/ultre.me/golang-repo-template
+    docker:
+      - image: circleci/golang:1.13
+    environment:
+      GO111MODULE: "on"
+    steps:
+      - checkout
+      - retry/install
+      - tools/mod-download
+      - tools/mod-tidy-check
+      - run: retry -m 3 make install
+      - run: retry -m 3 make unittest
+      - moul/install_golangci-lint
+      - run: PATH=$PATH:$(pwd)/bin retry -m 3 make lint
+      - codecov/upload:
+          file: coverage.txt
+
+  docker-build:
+    docker:
+      - image: docker:18.06.3-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - docker/build:
+          image: ultreme/golang-repo-template
+      #- docker/dockerlint
+
+workflows:
+  main:
+    jobs:
+      - go-build
+      - docker-build
