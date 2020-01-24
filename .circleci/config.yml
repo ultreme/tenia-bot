@@ -10,7 +10,7 @@ orbs:
 
 jobs:
   go-build:
-    working_directory: /go/src/ultre.me/golang-repo-template
+    working_directory: /go/src/ultre.me/tenia-bot
     docker:
       - image: circleci/golang:1.13
     environment:
@@ -35,7 +35,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - docker/build:
-          image: ultreme/golang-repo-template
+          image: ultreme/tenia-bot
       #- docker/dockerlint
 
 workflows:

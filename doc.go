@@ -22,4 +22,4 @@
 //        / /|_/ // / ___/ __ \ /_ </ /
 //       / /  / // / /__/ / / /__/ / /
 //      /_/  /_//_/\___/_/ /_/____/_/
-package main // import "ultre.me/golang-repo-template"
+package main // import "ultre.me/tenia-bot"
